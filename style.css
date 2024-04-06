@@ -1,0 +1,66 @@
+body {
+  overflow: hidden;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#ball {
+  background-image: linear-gradient(-170deg, #feb4b4, red);
+  box-shadow: -1px 1px 8px darkgray;
+}
+
+#paddle {
+  border-radius: 8px;
+  box-shadow: 3px 3px 8px darkgray;
+}
+
+#start-screen {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: linear-gradient(170deg, #ffffad, yellow);
+  box-shadow: 5px 5px 20px darkgray;
+  padding: 20px 60px;
+  border-radius: 20px;
+  border: 8px dashed red;
+}
+
+#start-screen > h2 {
+  font-size: 40px;
+  color: red;
+  margin: 4px;
+}
+
+#start-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: orange;
+  font-size: 20px;
+  color: red;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+}
+
+td {
+  empty-cells: show;
+  table-layout: fixed;
+  height: 50px;
+  background-image: linear-gradient(170deg,#ffeac2, orange);
+  color: red;
+  margin: 4px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 30px;
+  box-shadow: 3px 3px 10px darkgray;
+}
+
+table {
+  table-layout: fixed;
+}
+
+#level1 > table {
+  margin: 10%;
+  width: 80%;
+}
