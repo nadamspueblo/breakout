@@ -129,6 +129,7 @@ function checkLvl1Hits() {
       if (bgColor != "inherit" && text != "") {
         setStyle("background-image", "inherit", "block" + n);
         setStyle("box-shadow", "inherit", "block" + n);
+        setStyle("visibility", "inherit", "block" + n);
         blockCount++;
       }
       else {
@@ -159,6 +160,7 @@ function checkLvl2Hits() {
       if (bgColor != "inherit" && text != "") {
         setStyle("background-image", "inherit", "block" + n);
         setStyle("box-shadow", "inherit", "block" + n);
+        setStyle("visibility", "inherit", "block" + n);
         blockCount++;
       }
       else {
@@ -182,7 +184,7 @@ function checkLvl2Hits() {
 }
 
 function resetBall() {
-  let angle = getRandomInt(-120, -60);
+  let angle = getRandomInt(60, 120);
   setRotation(angle, "ball");
   setX(getWidth() / 2, "ball");
   setY(getHeight() / 2, "ball");
@@ -282,6 +284,7 @@ function checkPaddleCollision() {
     let angle = getRotation("ball");
     angle = -angle + getRandomInt(-10, 10);
     setRotation(angle, "ball");
+    setY(getY("paddle") - 10, "ball");
   }
 }
 
