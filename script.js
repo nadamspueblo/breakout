@@ -16,21 +16,75 @@ let ballSpeed = 10;
 let leftPressed = false;
 let rightPressed = false;
 let paddleSpeed = 10;
+let level = 1;
+let lives = 3;
+let count = 3;
+let counterId = 0;
+let blockCount = 0;
+let totalBlocks = 0;
+let score = 0;
 
 function init() {
   //showControls();
-  createCircle(getWidth() / 2, getHeight() - 200, 10, "inherit", "ball");
-  createRect(getWidth() / 2 - 50, getHeight() - 50, 100, 20, "blue", "paddle");
-  let angle = getRandomInt(-160, -20);
-  setRotation(angle, "ball");
+  addClickEvent("start-button", startNextLvl);
   addEventListener("keydown", keyDown);
   addEventListener("keyup", keyUp);
-  addClickEvent("start-button", start);
+  addClickEvent("retry-button", reloadPage);
+  
+  createCircle(getWidth() / 2, getHeight() - 200, 10, "inherit", "ball");
+  let angle = getRandomInt(-160, -20);
+  setRotation(angle, "ball");
+  hide("ball");
+  createRect(getWidth() / 2 - 50, getHeight() - 50, 100, 20, "blue", "paddle");
+  hide("paddle");
 }
 
-function start() {
+function reloadPage(){
+  location.reload();
+}
+
+function startGame() {
+  hide("gameover-screen");
+  resetBall();
+  show("ball");
+  resetPaddle();
+  show("paddle");
+  startNextLvl();
+}
+
+function startLvl1() {
   hide("start-screen");
-  startAnimation();
+  show("level1");
+  score = 0;
+  totalBlocks = 8;
+  blockCount = 0;
+  lives = 3;
+  for (let n = 1; n <= totalBlocks; n++) {
+    show("block" + n);
+  }
+  startLife();
+}
+
+function startLvl2() {
+  hide("start-screen");
+  show("level2");
+  totalBlocks = 40;
+  startLife();
+}
+
+function startNextLvl() {  
+  resetBall();
+  show("ball");
+  resetPaddle();
+  show("paddle");
+
+  if (level == 1) {
+    startLvl1();
+  }
+  else if (level == 2) {
+    hide("level1");
+    startLvl2();
+  }
 }
 
 function mainLoop() {
@@ -38,47 +92,99 @@ function mainLoop() {
   animatePaddle();
   checkPaddleCollision();
 
-  if (isTouching("ball", "block1")) {
-    hide("block1");
-    bounceVert();
+  if (blockCount >= totalBlocks) {
+    stopAnimation();
+    show("start-screen");
+    level++;
+    setText("Level " + level, "lvl-display");
   }
-  else if (isTouching("ball", "block2")) {
-    hide("block2");
-    bounceVert();
+
+  if (level == 1) {
+    checkLvl1Hits();
   }
-  else if (isTouching("ball", "block3")) {
-    hide("block3");
-    bounceVert();
-  }
-  else if (isTouching("ball", "block4")) {
-    hide("block4");
-    bounceVert();
-  }
-  else if (isTouching("ball", "block5")) {
-    hide("block5");
-    bounceVert();
-  }
-  else if (isTouching("ball", "block6")) {
-    hide("block6");
-    bounceVert();
-  }
-  else if (isTouching("ball", "block7")) {
-    hide("block7");
-    bounceVert();
-  }
-  else if (isTouching("ball", "block8")) {
-    hide("block8");
-    bounceVert();
+  else if (level == 2){
+    checkLvl2Hits();
   }
 
 }
 
-function reset() {
-  let angle = getRandomInt(-160, -20);
-  console.log(angle);
+function checkLvl1HitsOld() {
+  for (let n = 1; n <= totalBlocks; n++) {
+    if (isTouching("ball", "block" + n)) {
+      let text = getText("block" + n);
+      if (text != "") {
+        if (text == "💎"){
+          score++;
+          setText("💎 X " + score, "score-display");
+        }
+        setText("", "block" + n);
+      }
+      else {
+        hide("block" + n);
+        blockCount++;
+      }
+      bounceVert();
+      break
+    }
+  }
+}
+
+function checkLvl1Hits() {
+  for (let n = 1; n <= totalBlocks; n++) {
+    if (isTouching("ball", "block" + n)) {
+      let bgColor = getStyle("background-image", "block" + n);
+      let text = getText("block" + n);
+      if (bgColor != "inherit" && text != "") {
+        setStyle("background-image", "inherit", "block" + n);
+        setStyle("box-shadow", "inherit", "block" + n);
+        blockCount++;
+      }
+      else {
+        hide("block" + n);
+        if (text == "💎"){
+          score++;
+          setText("💎 X " + score, "score-display");
+        }
+        else {
+          blockCount++;
+        }
+      }
+      bounceVert();
+      break;
+    }
+  }
+}
+
+function checkLvl2Hits() {
+  for (let n = 9; n <= totalBlocks; n++) {
+    if (isTouching("ball", "block" + n)) {
+      let text = getText("block" + n);
+      if (text != "") {
+        if (text == "💎"){
+          score++;
+          setText("💎 X " + score, "score-display");
+        }
+        setText("", "block" + n);
+      }
+      else {
+        hide("block" + n);
+        blockCount++;
+      }
+      bounceVert();
+      break
+    }
+  }
+}
+
+function resetBall() {
+  let angle = getRandomInt(-120, -60);
   setRotation(angle, "ball");
   setX(getWidth() / 2, "ball");
   setY(getHeight() / 2, "ball");
+}
+
+function resetPaddle() {
+  setX(getWidth() / 2 - 50, "paddle");
 }
 
 function animateBall() {
@@ -87,20 +193,61 @@ function animateBall() {
   if (getX("ball") >= getWidth() - 10 || getX("ball") <= 10) {
     bounceHorz();
   }
-  else if (getY("ball") >= getHeight() - 10 || getY("ball") <= 10) {
+  else if (getY("ball") <= 10) {
     bounceVert();
   }
+  else if (getY("ball") >= getY("paddle") + 10) {
+    lives = lives - 1;
+    setText("🟦 X " + lives, "lives-display");
+    resetBall();
+    resetPaddle();
+    stopAnimation();
+    if (lives > 0) {
+      startLife();
+    }
+    else {
+      showGameOver();
+    }
+  }
+}
+
+function startLife() {
+  count = 2;
+  show("timer");
+  setText(3, "timer");
+  counterId = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  if (count > 0) {
+    setText(count, "timer");
+    count--;
+    }
+    else {
+      hide("timer");
+      show("paddle");
+      show("ball");
+      startAnimation();
+      clearInterval(counterId);
+    }
+}
+
+function showGameOver() {
+  hide("paddle");
+  hide("ball");
+  show("gameover-screen");
+  stopAnimation();
 }
 
 function bounceHorz() {
   let angle = getRotation("ball");
-  angle = (180 - angle);
+  angle = (180 - angle) + getRandomInt(-10, 10);
   setRotation(angle, "ball");
 }
 
 function bounceVert() {
   let angle = getRotation("ball");
-  angle = -angle;
+  angle = -angle + getRandomInt(-10, 10);
   setRotation(angle, "ball");
 }
 

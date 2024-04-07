@@ -1,6 +1,8 @@
 body {
+  position:absolute;
   overflow: hidden;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-variant: small-caps;
 }
 
 #ball {
@@ -13,7 +15,11 @@ body {
   box-shadow: 3px 3px 8px darkgray;
 }
 
-#start-screen {
+#start-screen, #gameover-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -24,13 +30,24 @@ body {
   border: 8px dashed red;
 }
 
-#start-screen > h2 {
+#gameover-screen {
+  visibility: hidden;
+}
+
+#start-screen > h2, #gameover-screen > h2 {
   font-size: 40px;
+  color: red;
+  margin: 4px;
+  text-align: center;
+}
+
+#start-screen > h1 {
+  font-size: 80px;
   color: red;
   margin: 4px;
 }
 
-#start-button {
+#start-button, #retry-button {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -60,7 +77,29 @@ table {
   table-layout: fixed;
 }
 
-#level1 > table {
-  margin: 10%;
+#level1 > table, #level2 > table {
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 50px;
   width: 80%;
+}
+
+#level1, #level2 {
+  position: absolute;
+  visibility: hidden;
+}
+
+#timer {
+  color: red;
+  font-size: 80px;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  visibility: hidden;
+}
+
+#dashboard {
+  position: absolute;
+  bottom: 0px;
 }

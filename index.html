@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>replit</title>
+  <title>BreakOut!</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
   <script defer src="https://pueblocs.org/domhelper/domhelper.js"></script>
   <script defer src="script.js"></script>
@@ -18,7 +18,7 @@
       <td id="block1"></td>
       <td id="block2">💎</td>
       <td id="block3">😊</td>
-      <td id="block4">💎x3</td>
+      <td id="block4">💎</td>
     </tr>
     <tr>
       <td id="block5">💎</td>
@@ -29,9 +29,67 @@
   </table>
   </section>
 
+  <section id="level2">
+    <table>
+      <tr>
+        <td id="block9"></td>
+        <td id="block10">💎</td>
+        <td id="block11">😊</td>
+        <td id="block12">💎</td>
+        <td id="block13"></td>
+        <td id="block14">💎</td>
+        <td id="block15">😊</td>
+        <td id="block16">💎</td>
+      </tr>
+      <tr>
+        <td id="block17">💎</td>
+        <td id="block18"></td>
+        <td id="block19"></td>
+        <td id="block20">💎</td>
+        <td id="block21">💎</td>
+        <td id="block22"></td>
+        <td id="block23"></td>
+        <td id="block24">💎</td>
+      </tr>
+      <tr>
+        <td id="block25">💎</td>
+        <td id="block26"></td>
+        <td id="block27"></td>
+        <td id="block28">💎</td>
+        <td id="block29">💎</td>
+        <td id="block30"></td>
+        <td id="block31"></td>
+        <td id="block32">💎</td>
+      </tr>
+      <tr>
+        <td id="block33">💎</td>
+        <td id="block34"></td>
+        <td id="block35"></td>
+        <td id="block36">💎</td>
+        <td id="block37">💎</td>
+        <td id="block38"></td>
+        <td id="block39"></td>
+        <td id="block40">💎</td>
+      </tr>
+    </table>
+    </section>
+
   <section id="start-screen">
-    <h2>Level 1</h2>
+    <h1>BreakOut!</h1>
+    <h2 id="lvl-display">Level 1</h2>
     <button id="start-button">Play</button>
+  </section>
+
+  <h2 id="timer">3</h2>
+
+  <section id="gameover-screen">
+    <h2>GAME OVER</h2>
+    <button id="retry-button">Try again</button>
+  </section>
+
+  <section id="dashboard">
+    <h2 id="score-display">💎 X 0</h2>
+    <h2 id="lives-display">🟦 X 3</h2>
   </section>
 </body>
 
