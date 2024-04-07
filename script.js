@@ -43,17 +43,7 @@ function reloadPage(){
   location.reload();
 }
 
-function startGame() {
-  hide("gameover-screen");
-  resetBall();
-  show("ball");
-  resetPaddle();
-  show("paddle");
-  startNextLvl();
-}
-
 function startLvl1() {
-  hide("start-screen");
   show("level1");
   score = 0;
   totalBlocks = 8;
@@ -66,13 +56,13 @@ function startLvl1() {
 }
 
 function startLvl2() {
-  hide("start-screen");
   show("level2");
   totalBlocks = 40;
   startLife();
 }
 
 function startNextLvl() {  
+  hide("start-screen");
   resetBall();
   show("ball");
   resetPaddle();
@@ -94,6 +84,8 @@ function mainLoop() {
 
   if (blockCount >= totalBlocks) {
     stopAnimation();
+    hide("ball");
+    hide("paddle");
     show("start-screen");
     level++;
     setText("Level " + level, "lvl-display");
@@ -145,6 +137,10 @@ function checkLvl1Hits() {
           score++;
           setText("💎 X " + score, "score-display");
         }
+        else if (text == "❤️") {
+          lives++;
+          setText("❤️ X " + lives, "lives-display");
+        }
         else {
           blockCount++;
         }
@@ -158,20 +154,29 @@ function checkLvl1Hits() {
 function checkLvl2Hits() {
   for (let n = 9; n <= totalBlocks; n++) {
     if (isTouching("ball", "block" + n)) {
+      let bgColor = getStyle("background-image", "block" + n);
       let text = getText("block" + n);
-      if (text != "") {
+      if (bgColor != "inherit" && text != "") {
+        setStyle("background-image", "inherit", "block" + n);
+        setStyle("box-shadow", "inherit", "block" + n);
+        blockCount++;
+      }
+      else {
+        hide("block" + n);
         if (text == "💎"){
           score++;
           setText("💎 X " + score, "score-display");
         }
-        setText("", "block" + n);
-      }
-      else {
-        hide("block" + n);
-        blockCount++;
+        else if (text == "❤️") {
+          lives++;
+          setText("❤️ X " + lives, "lives-display");
+        }
+        else {
+          blockCount++;
+        }
       }
       bounceVert();
-      break
+      break;
     }
   }
 }
@@ -190,15 +195,21 @@ function resetPaddle() {
 function animateBall() {
   move(ballSpeed, "ball");
 
-  if (getX("ball") >= getWidth() - 10 || getX("ball") <= 10) {
+  if (getX("ball") >= getWidth() - 10) {
     bounceHorz();
+    setX(getWidth() - 10, "ball");
+  }
+  else if (getX("ball") <= 10){
+    bounceHorz();
+    setX(10, "ball");
   }
   else if (getY("ball") <= 10) {
     bounceVert();
+    setY(10, "ball");
   }
-  else if (getY("ball") >= getY("paddle") + 10) {
+  else if (getY("ball") >= getY("paddle")) {
     lives = lives - 1;
-    setText("🟦 X " + lives, "lives-display");
+    setText("❤️ X " + lives, "lives-display");
     resetBall();
     resetPaddle();
     stopAnimation();
@@ -241,13 +252,13 @@ function showGameOver() {
 
 function bounceHorz() {
   let angle = getRotation("ball");
-  angle = (180 - angle) + getRandomInt(-10, 10);
+  angle = (180 - angle);
   setRotation(angle, "ball");
 }
 
 function bounceVert() {
   let angle = getRotation("ball");
-  angle = -angle + getRandomInt(-10, 10);
+  angle = -angle;
   setRotation(angle, "ball");
 }
 
