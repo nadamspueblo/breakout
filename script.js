@@ -85,6 +85,7 @@ function startNextLvlOld() {
 }
 
 function startNextLvl() {
+  hide(levelType);
   hide("start-screen");
   resetBall();
   show("ball");
@@ -184,7 +185,6 @@ function mainLoop() {
     stopAnimation();
     hide("ball");
     hide("paddle");
-    hide(levelType);
     show("start-screen");
     level++;
     setText("Level " + level, "lvl-display");
