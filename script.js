@@ -267,7 +267,7 @@ function checkLvlHits() {
         removeClass(className, "block" + n);
         addClass("block", "block" + n);
       }
-      else {
+      else if (className != "collectItem") {
         if (text == "💎") {
           score++;
           addClass("collectItem", "block" + n);
