@@ -227,6 +227,7 @@ function checkLvlHits() {
       let text = getText("block" + n);
       if (className == "block") {
         removeClass(className, "block" + n);
+        setStyle("visibility", "inherit", "block" + n);
         blockCount++;
         if (text == "") hide("block" + n);
       }
