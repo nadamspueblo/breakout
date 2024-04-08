@@ -17,10 +17,13 @@ let leftPressed = false;
 let rightPressed = false;
 let paddleSpeed = 10;
 let level = 1;
+let levelType = "level2x4";
 let lives = 3;
 let count = 3;
 let counterId = 0;
 let blockCount = 0;
+let startId = 1;
+let endId = 8;
 let totalBlocks = 0;
 let score = 0;
 
@@ -31,7 +34,7 @@ function init() {
   addEventListener("keyup", keyUp);
   addClickEvent("retry-button", reloadPage);
   
-  createCircle(getWidth() / 2, getHeight() - 200, 10, "inherit", "ball");
+  createCircle(getWidth() / 2, getHeight() - 200, 10, "red", "ball");
   let angle = getRandomInt(-160, -20);
   setRotation(angle, "ball");
   hide("ball");
@@ -61,7 +64,7 @@ function startLvl2() {
   startLife();
 }
 
-function startNextLvl() {  
+function startNextLvlOld() {  
   hide("start-screen");
   resetBall();
   show("ball");
@@ -75,6 +78,68 @@ function startNextLvl() {
     hide("level1");
     startLvl2();
   }
+  else {
+    hide("level2");
+    showGameOver();
+  }
+}
+
+function startNextLvl() {
+  hide("start-screen");
+  resetBall();
+  show("ball");
+  resetPaddle();
+  show("paddle");
+
+  if (level == 1) {
+    score = 0;
+    totalBlocks = 0;
+    blockCount = 0;
+    lives = 3;
+  }
+  
+  if (level > 3) {
+    levelType = "level4x8";
+  }
+
+  if (levelType == "level2x4") {
+    totalBlocks += 8;
+    startId = 1;
+    endId = 8;
+  }
+  else if (levelType == "level4x8"){
+    totalBlocks += 32;
+    startId = 9;
+    endId = 40;
+  }
+
+  // Fill powerups
+  resetLevel();
+  show(levelType);
+  startLife();
+}
+
+function resetLevel() {
+  for (let n = startId; n <= endId; n++) {
+    addClass("block", "block" + n);
+    if (level > 1) {
+      setText(getRandomPowerUp(), "block" + n);
+    }
+    show("block" + n);
+  }
+}
+
+function getRandomPowerUp() {
+  let num = getRandomInt(1, 100);
+  if (num < 5) {
+    return "❤️";
+  } 
+  else if (num < 33) {
+    return "💎";
+  }
+  else {
+    return "";
+  }
 }
 
 function mainLoop() {
@@ -82,21 +147,25 @@ function mainLoop() {
   animatePaddle();
   checkPaddleCollision();
 
+  //console.log("count " + blockCount);
+  //console.log("total " + totalBlocks);
   if (blockCount >= totalBlocks) {
     stopAnimation();
     hide("ball");
     hide("paddle");
+    hide(levelType);
     show("start-screen");
     level++;
     setText("Level " + level, "lvl-display");
   }
 
-  if (level == 1) {
+  checkLvlHits();
+  /*if (level == 1) {
     checkLvl1Hits();
   }
   else if (level == 2){
     checkLvl2Hits();
-  }
+  }*/
 
 }
 
@@ -117,6 +186,63 @@ function checkLvl1HitsOld() {
       }
       bounceVert();
       break
+    }
+  }
+}
+
+function getClass(id) {
+  let e = document.getElementById(id);
+  try {
+    return e.classList[0];
+  }
+  catch (error) {
+    console.error(error.stack);
+  }
+}
+
+function removeClass(name, id) {
+  let e = document.getElementById(id);
+  try {
+    e.classList.remove(name);
+  }
+  catch (error) {
+    console.error(error.stack);
+  }
+}
+
+function addClass(name, id) {
+  let e = document.getElementById(id);
+  try {
+    e.classList.add(name);
+  }
+  catch (error) {
+    console.error(error.stack);
+  }
+}
+
+function checkLvlHits() {
+  for (let n = startId; n <= endId; n++) {
+    if (isTouching("ball", "block" + n)) {
+      let className = getClass("block" + n);
+      let text = getText("block" + n);
+      if (className == "block") {
+        removeClass(className, "block" + n);
+        blockCount++;
+        if (text == "") hide("block" + n);
+      }
+      else {        
+        if (text == "💎"){
+          score++;
+          setText("💎 X " + score, "score-display");
+        }
+        else if (text == "❤️") {
+          lives++;
+          setText("❤️ X " + lives, "lives-display");
+        }
+        hide("block" + n);
+      }
+      bounceVert();
+      break;
     }
   }
 }
@@ -282,7 +408,11 @@ function animatePaddle() {
 function checkPaddleCollision() {
   if (isTouching("ball", "paddle")) {
     let angle = getRotation("ball");
-    angle = -angle + getRandomInt(-10, 10);
+    if (leftPressed) angle = -135;
+    else if (rightPressed) angle = -45;
+    else angle = -angle;
+    angle = angle + getRandomInt(-10, 10);
+    angle = Math.max(-135, Math.min(-45, angle));
     setRotation(angle, "ball");
     setY(getY("paddle") - 10, "ball");
   }
