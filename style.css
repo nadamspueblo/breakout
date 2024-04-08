@@ -1,5 +1,5 @@
 body {
-  position:absolute;
+  position: absolute;
   overflow: hidden;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-variant: small-caps;
@@ -13,7 +13,8 @@ body {
   box-shadow: 3px 3px 8px darkgray;
 }
 
-#start-screen, #gameover-screen {
+#start-screen,
+#gameover-screen {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -32,20 +33,22 @@ body {
   visibility: hidden;
 }
 
-#start-screen > h2, #gameover-screen > h2 {
+#start-screen>h2,
+#gameover-screen>h2 {
   font-size: 40px;
   color: red;
   margin: 4px;
   text-align: center;
 }
 
-#start-screen > h1 {
+#start-screen>h1 {
   font-size: 80px;
   color: red;
   margin: 4px;
 }
 
-#start-button, #retry-button {
+#start-button,
+#retry-button {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -70,7 +73,13 @@ td {
 
 .block {
   box-shadow: 3px 3px 10px darkgray;
-  background-image: linear-gradient(170deg,#ffeac2, orange);
+  background-image: linear-gradient(170deg, #ffeac2, orange);
+  color: red;
+}
+
+.block-hard {
+  box-shadow: 3px 3px 10px darkgray;
+  background-image: linear-gradient(170deg, rgb(184, 147, 147), brown);
   color: red;
 }
 
@@ -78,14 +87,18 @@ table {
   table-layout: fixed;
 }
 
-#level2x4 > table, #level4x8 > table {
+#level2x4>table,
+#level4x8>table,
+#level8x8>table {
   margin-left: 10%;
   margin-right: 10%;
   margin-top: 50px;
   width: 80%;
 }
 
-#level2x4, #level4x8 {
+#level2x4,
+#level4x8,
+#level8x8 {
   position: absolute;
   visibility: hidden;
   height: 100vh;
@@ -99,6 +112,10 @@ table {
 
 #level4x8 {
   background-image: url("bg2.png");
+}
+
+#level8x8 {
+  background-image: url("bg1.png");
 }
 
 #timer {

@@ -33,7 +33,7 @@ function init() {
   addEventListener("keydown", keyDown);
   addEventListener("keyup", keyUp);
   addClickEvent("retry-button", reloadPage);
-  
+
   createCircle(getWidth() / 2, getHeight() - 200, 10, "red", "ball");
   let angle = getRandomInt(-160, -20);
   setRotation(angle, "ball");
@@ -42,7 +42,7 @@ function init() {
   hide("paddle");
 }
 
-function reloadPage(){
+function reloadPage() {
   location.reload();
 }
 
@@ -64,7 +64,7 @@ function startLvl2() {
   startLife();
 }
 
-function startNextLvlOld() {  
+function startNextLvlOld() {
   hide("start-screen");
   resetBall();
   show("ball");
@@ -97,8 +97,11 @@ function startNextLvl() {
     blockCount = 0;
     lives = 3;
   }
-  
-  if (level > 3) {
+
+  if (level > 6) {
+    levelType = "level8x8";
+  }
+  else if (level > 3) {
     levelType = "level4x8";
   }
 
@@ -107,10 +110,15 @@ function startNextLvl() {
     startId = 1;
     endId = 8;
   }
-  else if (levelType == "level4x8"){
+  else if (levelType == "level4x8") {
     totalBlocks += 32;
     startId = 9;
     endId = 40;
+  }
+  else if (levelType == "level8x8") {
+    totalBlocks += 64;
+    startId = 41;
+    endId = 104;
   }
 
   // Fill powerups
@@ -121,9 +129,32 @@ function startNextLvl() {
 
 function resetLevel() {
   for (let n = startId; n <= endId; n++) {
-    addClass("block", "block" + n);
+    let blockId = "block" + n;
+    addClass("block", blockId);
     if (level > 1) {
-      setText(getRandomPowerUp(), "block" + n);
+      setText(getRandomPowerUp(), blockId);
+      if (level == 2 || level == 3) {
+        if (n == startId || n == endId) {
+          removeClass("block", blockId);
+          addClass("block-hard", blockId);
+        }
+      }
+      else if (level == 5 || level == 8) {
+        if (n % 3 == 1) {
+          removeClass("block", blockId);
+          addClass("block-hard", blockId);
+        }
+      }
+      else if (level == 6 || level == 9) {
+        if (n % 2 == 1) {
+          removeClass("block", blockId);
+          addClass("block-hard", blockId);
+        }
+      }
+      else if (level > 9) {
+        removeClass("block", blockId);
+        addClass("block-hard", blockId);
+      }
     }
     show("block" + n);
   }
@@ -133,8 +164,8 @@ function getRandomPowerUp() {
   let num = getRandomInt(1, 100);
   if (num < 5) {
     return "❤️";
-  } 
-  else if (num < 33) {
+  }
+  else if (num < 50) {
     return "💎";
   }
   else {
@@ -174,7 +205,7 @@ function checkLvl1HitsOld() {
     if (isTouching("ball", "block" + n)) {
       let text = getText("block" + n);
       if (text != "") {
-        if (text == "💎"){
+        if (text == "💎") {
           score++;
           setText("💎 X " + score, "score-display");
         }
@@ -231,8 +262,12 @@ function checkLvlHits() {
         blockCount++;
         if (text == "") hide("block" + n);
       }
-      else {        
-        if (text == "💎"){
+      else if (className == "block-hard") {
+        removeClass(className, "block" + n);
+        addClass("block", "block" + n);
+      }
+      else {
+        if (text == "💎") {
           score++;
           setText("💎 X " + score, "score-display");
         }
@@ -261,7 +296,7 @@ function checkLvl1Hits() {
       }
       else {
         hide("block" + n);
-        if (text == "💎"){
+        if (text == "💎") {
           score++;
           setText("💎 X " + score, "score-display");
         }
@@ -292,7 +327,7 @@ function checkLvl2Hits() {
       }
       else {
         hide("block" + n);
-        if (text == "💎"){
+        if (text == "💎") {
           score++;
           setText("💎 X " + score, "score-display");
         }
@@ -328,7 +363,7 @@ function animateBall() {
     bounceHorz();
     setX(getWidth() - 10, "ball");
   }
-  else if (getX("ball") <= 10){
+  else if (getX("ball") <= 10) {
     bounceHorz();
     setX(10, "ball");
   }
@@ -336,7 +371,7 @@ function animateBall() {
     bounceVert();
     setY(10, "ball");
   }
-  else if (getY("ball") >= getY("paddle")) {
+  else if (getY("ball") > getY("paddle")) {
     lives = lives - 1;
     setText("❤️ X " + lives, "lives-display");
     resetBall();
@@ -362,14 +397,14 @@ function updateTimer() {
   if (count > 0) {
     setText(count, "timer");
     count--;
-    }
-    else {
-      hide("timer");
-      show("paddle");
-      show("ball");
-      startAnimation();
-      clearInterval(counterId);
-    }
+  }
+  else {
+    hide("timer");
+    show("paddle");
+    show("ball");
+    startAnimation();
+    clearInterval(counterId);
+  }
 }
 
 function showGameOver() {
