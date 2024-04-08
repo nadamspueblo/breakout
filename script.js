@@ -131,6 +131,7 @@ function startNextLvl() {
 function resetLevel() {
   for (let n = startId; n <= endId; n++) {
     let blockId = "block" + n;
+    removeClass("collectItem", blockId);
     addClass("block", blockId);
     if (level > 1) {
       setText(getRandomPowerUp(), blockId);
@@ -269,13 +270,16 @@ function checkLvlHits() {
       else {
         if (text == "💎") {
           score++;
+          addClass("collectItem", "block" + n);
           setText("💎 X " + score, "score-display");
         }
         else if (text == "❤️") {
           lives++;
+          addClass("collectItem", "block" + n);
           setText("❤️ X " + lives, "lives-display");
         }
-        hide("block" + n);
+        else
+          hide("block" + n);
       }
       bounceVert();
       break;

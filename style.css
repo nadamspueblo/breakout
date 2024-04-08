@@ -70,6 +70,8 @@ td {
   text-align: center;
   font-size: 30px;
   box-shadow: 3px 3px 10px white;
+  position: relative;
+  top: 0px;
 }
 
 .block {
@@ -91,6 +93,8 @@ table {
 #level2x4>table,
 #level4x8>table,
 #level8x8>table {
+  position: relative;
+  top: 0px;
   margin-left: 10%;
   margin-right: 10%;
   margin-top: 50px;
@@ -133,4 +137,16 @@ table {
   position: absolute;
   bottom: 0px;
   color: white;
+}
+
+@keyframes floatup {
+  to {
+    top: -400px;
+    visibility: hidden;
+  }
+}
+
+.collectItem {
+  animation: floatup 400ms ease-in 0s 1 normal forwards;
+  box-shadow: none;
 }
