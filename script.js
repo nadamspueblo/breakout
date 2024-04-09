@@ -257,7 +257,6 @@ function checkLvlHits() {
       let bottom = getBottom("block" + n);
       if (y > top + 2 && y < bottom - 2) {
         bounceHorz();
-        console.log("bounce horz");
       }
       else
         bounceVert();
