@@ -222,35 +222,6 @@ function checkLvl1HitsOld() {
   }
 }
 
-function getClass(id) {
-  let e = document.getElementById(id);
-  try {
-    return e.classList[0];
-  }
-  catch (error) {
-    console.error(error.stack);
-  }
-}
-
-function removeClass(name, id) {
-  let e = document.getElementById(id);
-  try {
-    e.classList.remove(name);
-  }
-  catch (error) {
-    console.error(error.stack);
-  }
-}
-
-function addClass(name, id) {
-  let e = document.getElementById(id);
-  try {
-    e.classList.add(name);
-  }
-  catch (error) {
-    console.error(error.stack);
-  }
-}
 
 function checkLvlHits() {
   for (let n = startId; n <= endId; n++) {
@@ -281,7 +252,15 @@ function checkLvlHits() {
         else
           hide("block" + n);
       }
-      bounceVert();
+      let y = getY("ball");
+      let top = getTop("block" + n);
+      let bottom = getBottom("block" + n);
+      if (y > top + 2 && y < bottom - 2) {
+        bounceHorz();
+        console.log("bounce horz");
+      }
+      else
+        bounceVert();
       break;
     }
   }
@@ -474,6 +453,59 @@ function keyUp(event) {
   }
   if (event.code == "ArrowRight") {
     rightPressed = false;
+  }
+}
+
+// New DOM Helper functions
+function getClass(id) {
+  let e = document.getElementById(id);
+  try {
+    return e.classList[0];
+  }
+  catch (error) {
+    console.error(error.stack);
+  }
+}
+
+function removeClass(name, id) {
+  let e = document.getElementById(id);
+  try {
+    e.classList.remove(name);
+  }
+  catch (error) {
+    console.error(error.stack);
+  }
+}
+
+function addClass(name, id) {
+  let e = document.getElementById(id);
+  try {
+    e.classList.add(name);
+  }
+  catch (error) {
+    console.error(error.stack);
+  }
+}
+
+function getTop(id) {
+  try {
+    let e = document.getElementById(id);
+    let offset = e.getBoundingClientRect();
+    return offset.top;
+  }
+  catch (error) {
+    console.error(error.stack);
+  }
+}
+
+function getBottom(id) {
+  try {
+    let e = document.getElementById(id);
+    let offset = e.getBoundingClientRect();
+    return offset.bottom;
+  }
+  catch (error) {
+    console.error(error.stack);
   }
 }
 
