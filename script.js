@@ -252,15 +252,17 @@ function checkLvlHits() {
         else
           hide("block" + n);
       }
-      let y = getY("ball");
-      let top = getTop("block" + n);
-      let bottom = getBottom("block" + n);
-      if (y > top + 2 && y < bottom - 2) {
-        bounceHorz();
+      if (className != "collectItem") {
+        let y = getY("ball");
+        let top = getTop("block" + n);
+        let bottom = getBottom("block" + n);
+        if (y > top + 2 && y < bottom - 2) {
+          bounceHorz();
+        }
+        else
+          bounceVert();
+        break;
       }
-      else
-        bounceVert();
-      break;
     }
   }
 }
